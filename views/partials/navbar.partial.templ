@@ -1,0 +1,13 @@
+package partials
+
+templ Navbar() {
+	<nav class="bg-zinc-700">
+		<div class="container mx-auto flex justify-between items-center p-4">
+			<a hx-get="/" class="text-zinc-200">GOLLERY</a>
+			<div>
+				<a hx-get="/" hx-target="#content-area" hx-push-url="true" class="text-zinc-200">Home </a>
+				<a hx-get="/gallery" hx-target="#content-area" hx-push-url="true" class="text-zinc-200">Gallery </a>
+			</div>
+		</div>
+	</nav>
+}
