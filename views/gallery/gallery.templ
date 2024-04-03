@@ -1,0 +1,19 @@
+package gallery
+
+import "github.com/eeroleppalehto/go_gallery/views/layout"
+
+templ ShowInit() {
+	@layout.Base() {
+		<div>
+			<h1>Gallery</h1>
+			<p>Here are some pictures of my cat.</p>
+		</div>
+	}
+}
+
+templ Show() {
+	<div>
+		<h1>Gallery</h1>
+		<p>Here are some pictures of my cat.</p>
+	</div>
+}
