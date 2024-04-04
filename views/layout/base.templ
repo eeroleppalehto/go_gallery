@@ -4,7 +4,7 @@ import "github.com/eeroleppalehto/go_gallery/views/partials"
 
 templ Base() {
 	<!DOCTYPE html>
-	<html lang="en">
+	<html class="h-full" lang="en">
 		<head>
 			<meta charset="UTF-8"/>
 			<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
@@ -14,9 +14,9 @@ templ Base() {
 			<link rel="stylesheet" href="static/css/tailwind.css"/>
 			<title>Gollery</title>
 		</head>
-		<body class="bg-zinc-700">
+		<body class="bg-zinc-700 text-zinc-200 h-full">
 			@partials.Navbar()
-			<main id="content-area">
+			<main id="content-area" class="flex flex-col h-full">
 				{ children... }
 			</main>
 		</body>
