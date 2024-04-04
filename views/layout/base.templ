@@ -2,7 +2,7 @@ package layout
 
 import "github.com/eeroleppalehto/go_gallery/views/partials"
 
-templ Base() {
+templ Base(children templ.Component) {
 	<!DOCTYPE html>
 	<html class="h-full" lang="en">
 		<head>
@@ -17,7 +17,7 @@ templ Base() {
 		<body class="bg-zinc-700 text-zinc-200 h-full">
 			@partials.Navbar()
 			<main id="content-area" class="flex flex-col h-full">
-				{ children... }
+				@children
 			</main>
 		</body>
 	</html>

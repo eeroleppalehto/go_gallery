@@ -9,8 +9,5 @@ type HomeHandler struct {
 }
 
 func (h *HomeHandler) HandleHomeShow(c echo.Context) error {
-	if c.Request().Header.Get("Hx-Request") == "true" {
-		return render(c, home.Show())
-	}
-	return render(c, home.ShowInit())
+	return render(c, home.Show())
 }
