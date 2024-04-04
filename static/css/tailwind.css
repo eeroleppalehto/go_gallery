@@ -544,75 +544,53 @@ video {
   --tw-backdrop-sepia:  ;
 }
 
-.container {
-  width: 100%;
-}
-
-@media (min-width: 640px) {
-  .container {
-    max-width: 640px;
-  }
-}
-
-@media (min-width: 768px) {
-  .container {
-    max-width: 768px;
-  }
-}
-
-@media (min-width: 1024px) {
-  .container {
-    max-width: 1024px;
-  }
-}
-
-@media (min-width: 1280px) {
-  .container {
-    max-width: 1280px;
-  }
-}
-
-@media (min-width: 1536px) {
-  .container {
-    max-width: 1536px;
-  }
-}
-
 .mx-auto {
   margin-left: auto;
   margin-right: auto;
-}
-
-.block {
-  display: block;
 }
 
 .flex {
   display: flex;
 }
 
-.h-screen {
-  height: 100vh;
+.h-5\/6 {
+  height: 83.333333%;
 }
 
-.max-w-2xl {
-  max-width: 42rem;
+.h-96 {
+  height: 24rem;
+}
+
+.h-full {
+  height: 100%;
+}
+
+.max-h-full {
+  max-height: 100%;
+}
+
+.min-w-full {
+  min-width: 100%;
+}
+
+.max-w-7xl {
+  max-width: 80rem;
 }
 
 .max-w-xl {
   max-width: 36rem;
 }
 
-.max-w-96 {
-  max-width: 24rem;
-}
-
-.max-w-md {
-  max-width: 28rem;
+.flex-grow {
+  flex-grow: 1;
 }
 
 .flex-col {
   flex-direction: column;
+}
+
+.flex-wrap {
+  flex-wrap: wrap;
 }
 
 .items-center {
@@ -627,48 +605,26 @@ video {
   justify-content: space-between;
 }
 
-.gap-2 {
-  gap: 0.5rem;
+.gap-1 {
+  gap: 0.25rem;
 }
 
 .gap-4 {
   gap: 1rem;
 }
 
-.space-x-3 > :not([hidden]) ~ :not([hidden]) {
-  --tw-space-x-reverse: 0;
-  margin-right: calc(0.75rem * var(--tw-space-x-reverse));
-  margin-left: calc(0.75rem * calc(1 - var(--tw-space-x-reverse)));
+.gap-8 {
+  gap: 2rem;
 }
 
-.bg-gray-300 {
+.bg-zinc-200 {
   --tw-bg-opacity: 1;
-  background-color: rgb(209 213 219 / var(--tw-bg-opacity));
+  background-color: rgb(228 228 231 / var(--tw-bg-opacity));
 }
 
-.bg-gray-900 {
+.bg-zinc-600 {
   --tw-bg-opacity: 1;
-  background-color: rgb(17 24 39 / var(--tw-bg-opacity));
-}
-
-.bg-gray-700 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(55 65 81 / var(--tw-bg-opacity));
-}
-
-.bg-gray-800 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(31 41 55 / var(--tw-bg-opacity));
-}
-
-.bg-zinc-500 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(113 113 122 / var(--tw-bg-opacity));
-}
-
-.bg-zinc-800 {
-  --tw-bg-opacity: 1;
-  background-color: rgb(39 39 42 / var(--tw-bg-opacity));
+  background-color: rgb(82 82 91 / var(--tw-bg-opacity));
 }
 
 .bg-zinc-700 {
@@ -676,35 +632,43 @@ video {
   background-color: rgb(63 63 70 / var(--tw-bg-opacity));
 }
 
-.p-4 {
-  padding: 1rem;
+.bg-zinc-300 {
+  --tw-bg-opacity: 1;
+  background-color: rgb(212 212 216 / var(--tw-bg-opacity));
+}
+
+.fill-zinc-200 {
+  fill: #e4e4e7;
+}
+
+.fill-zinc-700 {
+  fill: #3f3f46;
+}
+
+.object-cover {
+  -o-object-fit: cover;
+     object-fit: cover;
+}
+
+.py-4 {
+  padding-top: 1rem;
+  padding-bottom: 1rem;
 }
 
 .text-center {
   text-align: center;
 }
 
-.font-serif {
-  font-family: ui-serif, Georgia, Cambria, "Times New Roman", Times, serif;
+.align-bottom {
+  vertical-align: bottom;
 }
 
-.font-mono {
-  font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, "Liberation Mono", "Courier New", monospace;
+.font-lato {
+  font-family: Lato, sans-serif;
 }
 
-.text-4xl {
-  font-size: 2.25rem;
-  line-height: 2.5rem;
-}
-
-.text-8xl {
-  font-size: 6rem;
-  line-height: 1;
-}
-
-.text-2xl {
-  font-size: 1.5rem;
-  line-height: 2rem;
+.font-oswald {
+  font-family: Oswald, sans-serif;
 }
 
 .text-3xl {
@@ -712,16 +676,13 @@ video {
   line-height: 2.25rem;
 }
 
+.text-8xl {
+  font-size: 6rem;
+  line-height: 1;
+}
+
 .font-semibold {
   font-weight: 600;
-}
-
-.leading-3 {
-  line-height: .75rem;
-}
-
-.leading-5 {
-  line-height: 1.25rem;
 }
 
 .leading-10 {
@@ -732,12 +693,31 @@ video {
   letter-spacing: -0.025em;
 }
 
-.text-white {
+.text-zinc-200 {
   --tw-text-opacity: 1;
-  color: rgb(255 255 255 / var(--tw-text-opacity));
+  color: rgb(228 228 231 / var(--tw-text-opacity));
 }
 
-.text-zinc-200 {
+.text-zinc-700 {
+  --tw-text-opacity: 1;
+  color: rgb(63 63 70 / var(--tw-text-opacity));
+}
+
+.dark\:bg-zinc-700:where(.dark, .dark *) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(63 63 70 / var(--tw-bg-opacity));
+}
+
+.dark\:bg-zinc-600:where(.dark, .dark *) {
+  --tw-bg-opacity: 1;
+  background-color: rgb(82 82 91 / var(--tw-bg-opacity));
+}
+
+.dark\:fill-zinc-200:where(.dark, .dark *) {
+  fill: #e4e4e7;
+}
+
+.dark\:text-zinc-200:where(.dark, .dark *) {
   --tw-text-opacity: 1;
   color: rgb(228 228 231 / var(--tw-text-opacity));
 }
