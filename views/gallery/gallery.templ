@@ -1,8 +1,25 @@
 package gallery
 
-templ Show() {
-	<div class="">
-		<h1>Gallery</h1>
-		<p>Here are some pictures of my cat.</p>
+import (
+	"fmt"
+	"github.com/eeroleppalehto/go_gallery/models"
+)
+
+templ Show(images []models.Image) {
+	<div class="flex flex-wrap max-w-7xl mx-auto gap-1 bg-zinc-300 dark:bg-zinc-600">
+		for _, image := range images {
+			@Image(image)
+		}
+		<div class="h-96 flex-grow bg-zinc-200 dark:bg-zinc-700" style="flex-grow: 10"></div>
+	</div>
+}
+
+templ Image(image models.Image) {
+	<div class="h-96 flex-grow">
+		<img
+			src={ fmt.Sprintf("static/images/%s", image.Filename) }
+			loading="lazy"
+			class="min-w-full max-h-full object-cover align-bottom"
+		/>
 	</div>
 }
