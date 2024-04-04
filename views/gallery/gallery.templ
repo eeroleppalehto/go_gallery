@@ -15,11 +15,15 @@ templ Show(images []models.Image) {
 }
 
 templ Image(image models.Image) {
-	<div class="h-96 flex-grow">
+	<div class="h-96 flex-grow overflow-hidden">
 		<img
 			src={ fmt.Sprintf("static/images/%s", image.Filename) }
 			loading="lazy"
-			class="min-w-full max-h-full object-cover align-bottom"
+			class="min-w-full max-h-full object-cover align-bottom blur-0 hover:blur-sm transition-all duration-300 ease-in-out"
 		/>
+		<div class="opacity-0">
+			<h2 class="">{ image.Title }</h2>
+			<p>{ image.Description }</p>
+		</div>
 	</div>
 }
