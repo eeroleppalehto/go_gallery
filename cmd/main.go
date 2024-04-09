@@ -21,5 +21,7 @@ func main() {
 
 	app.GET("/gallery", galleryHandler.HandleGalleryShow)
 
+	app.GET("/photos/:imageID", galleryHandler.HandlePhotoShow)
+
 	app.Logger.Fatal(app.Start(":8081"))
 }
