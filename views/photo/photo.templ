@@ -1,0 +1,14 @@
+package photo
+
+import (
+	"github.com/eeroleppalehto/go_gallery/models"
+	"fmt"
+)
+
+templ Show(image models.Image) {
+	<section class="flex flex-col max-w-7xl mx-auto items-center gap-4 h-full">
+		<img class="h-2/3 object-contain shadow-lg" src={ fmt.Sprintf("/static/images/%s", image.Filename) } alt={ image.Title }/>
+		<h1 class="text-3xl font-bold">{ image.Title }</h1>
+		<p>{ image.Description }</p>
+	</section>
+}
