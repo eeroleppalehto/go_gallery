@@ -1,5 +1,10 @@
 package models
 
+import (
+	"errors"
+	"strconv"
+)
+
 type Image struct {
 	ID          int
 	Title       string
@@ -28,4 +33,16 @@ func GetImages() []Image {
 	}
 
 	return images
+}
+
+func GetImage(id string) (Image, error) {
+	images := GetImages()
+
+	for _, image := range images {
+		if strconv.Itoa(image.ID) == id {
+			return image, nil
+		}
+	}
+
+	return Image{}, errors.New("Image not found")
 }
