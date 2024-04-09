@@ -6,24 +6,48 @@ import (
 )
 
 templ Show(images []models.Image) {
-	<div class="flex flex-wrap max-w-7xl mx-auto gap-1 bg-zinc-300 dark:bg-zinc-600">
-		for _, image := range images {
-			@Image(image)
-		}
-		<div class="h-96 flex-grow bg-zinc-200 dark:bg-zinc-700" style="flex-grow: 10"></div>
+	<div class="flex flex-col flex-wrap max-w-7xl mx-auto items-center">
+		<h1 class="text-5xl p-12">Browse all photographs</h1>
+		<section id="images" class="flex flex-wrap max-w-7xl mx-auto gap-1 bg-zinc-300 dark:bg-zinc-600">
+			for _, image := range images {
+				@Image(image)
+			}
+			<div class="h-96 flex-grow bg-zinc-200 dark:bg-zinc-700" style="flex-grow: 10"></div>
+		</section>
 	</div>
+	<script>
+        document.getElementById("images").querySelectorAll("a").forEach((el) => {
+            const link = el;
+            const slideOver = link.querySelector("div");
+
+            el.addEventListener("click", () => {
+                document.getElementById('nav-link-gallery').classList.remove(...currentPageNavLinkStyles);
+            })
+
+            el.addEventListener("mouseover", (e) => {
+                slideOver.classList.remove("opacity-0");
+                slideOver.classList.add("opacity-100");
+                slideOver.classList.add("-translate-y-32");
+
+            });
+            el.addEventListener("mouseout", (e) => {
+                slideOver.classList.remove("opacity-100");
+                slideOver.classList.add("opacity-0");
+                slideOver.classList.remove("-translate-y-32");
+            });
+        });
+    </script>
 }
 
 templ Image(image models.Image) {
-	<div class="h-96 flex-grow overflow-hidden">
+	<a hx-get={ fmt.Sprintf("/photos/%d", image.ID) } hx-target="#content-area" hx-push-url="true" id={ fmt.Sprintf("%d", image.ID) } class="h-96 flex-grow overflow-hidden hover:overflow-y-clip cursor-pointer">
 		<img
-			src={ fmt.Sprintf("static/images/%s", image.Filename) }
-			loading="lazy"
+			src={ fmt.Sprintf("/static/images/%s", image.Filename) }
 			class="min-w-full max-h-full object-cover align-bottom blur-0 hover:blur-sm transition-all duration-300 ease-in-out"
 		/>
-		<div class="opacity-0">
-			<h2 class="">{ image.Title }</h2>
-			<p>{ image.Description }</p>
+		<div id={ fmt.Sprintf("image-%d", image.ID) } class="w-full h-full p-2 bg-zinc-600 text-zinc-200 opacity-0 duration-300 ease-in-out">
+			<h2 class="text-xl">{ image.Title }</h2>
+			<p class="font-lato mt-1">{ image.Description }</p>
 		</div>
-	</div>
+	</a>
 }
