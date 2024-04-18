@@ -16,12 +16,15 @@ func main() {
 
 	homeHandler := handler.HomeHandler{}
 	galleryHandler := handler.GalleryHandler{}
+	creatorshandler := handler.CreatorsHandler{}
 
 	app.GET("/", homeHandler.HandleHomeShow)
 
 	app.GET("/gallery", galleryHandler.HandleGalleryShow)
 
 	app.GET("/photos/:imageID", galleryHandler.HandlePhotoShow)
+
+	app.GET("/creators", creatorshandler.HandlePhotographerShow)
 
 	app.Logger.Fatal(app.Start(":8081"))
 }
