@@ -1,42 +1,48 @@
-package service
+package imageservice
 
 import (
 	"image"
 	"image/color"
-	"image/jpeg"
 	"math"
-	"os"
 )
 
-func LoadImage(filePath string) (image.Image, error) {
-	// Test if file can be opened
-	file, err := os.Open(filePath)
-	if err != nil {
-		return nil, err
-	}
-	defer file.Close()
+type JPG struct{}
+type WEBP struct{}
 
-	img, _, err := image.Decode(file)
-	if err != nil {
-		return nil, err
-	}
-
-	return img, err
+type ImageService struct {
+	JPG  JPG
+	WEBP WEBP
 }
 
-func SaveImage(img image.Image, filePath string) error {
-	file, err := os.Create(filePath)
-	if err != nil {
-		return err
-	}
+// func LoadImage(filePath string) (image.Image, error) {
+// 	// Test if file can be opened
+// 	file, err := os.Open(filePath)
+// 	if err != nil {
+// 		return nil, err
+// 	}
+// 	defer file.Close()
 
-	defer file.Close()
-	jpeg.Encode(file, img, nil)
+// 	img, _, err := image.Decode(file)
+// 	if err != nil {
+// 		return nil, err
+// 	}
 
-	return nil
-}
+// 	return img, err
+// }
 
-func GetNewBounds(img image.Image, pixels int) (image.Point, error) {
+// func SaveImage(img image.Image, filePath string) error {
+// 	file, err := os.Create(filePath)
+// 	if err != nil {
+// 		return err
+// 	}
+
+// 	defer file.Close()
+// 	jpeg.Encode(file, img, nil)
+
+// 	return nil
+// }
+
+func (i *ImageService) GetNewBounds(img image.Image, pixels int) (image.Point, error) {
 	X := img.Bounds().Size().X
 	Y := img.Bounds().Size().Y
 	currentPixels := X * Y
@@ -56,11 +62,11 @@ func GetNewBounds(img image.Image, pixels int) (image.Point, error) {
 
 
 		newX * newY == NewPixels
-		newX == NewPixels/ newY
+		newX == NewPixels / newY
 
-		newX == NewPixels* Ratio / newX		| *newX
-		pow(newX, 2) == NewPixels*Ratio
-		newX == sqrt(NewPixels*Ratio)
+		newX == NewPixels * aspectRatio / newX		| *newX
+		newX^2 == NewPixels * aspectRatio
+		newX == sqrt(NewPixels*aspectRatio)
 	*/
 
 	newX := math.Sqrt(float64(float64(pixels) * aspectRatio))
@@ -73,12 +79,33 @@ func GetNewBounds(img image.Image, pixels int) (image.Point, error) {
 
 }
 
-func Resize(img image.Image, newPoint image.Point) (image.Image, error) {
+func (i *ImageService) Resize(img image.Image, newPoint image.Point) (image.Image, error) {
 	scalefactor := float64(img.Bounds().Size().X) / float64(newPoint.X)
 	ResizedImg := image.NewRGBA(image.Rect(0, 0, newPoint.X, newPoint.Y))
 
-	// rgbaImg := img.
-	// Bilinear Interpolation
+	// The following algorithm uses Bilinear Interpolation
+	// to resize the image. The algorithm is based on the
+	//
+	//
+	// 	Visual repesantation of values used below
+	//  v1----------q2---------v2
+	// 	|			|			|
+	// 	|			q			|
+	// 	|			|			|
+	//  v3----------q1---------v4
+	//
+	// 	Where v1, v2, v3, v4 are the pixels of the original image
+	// 	and q is the pixel of the new image
+	//
+	// 	For each pixel in the new image, the algorithm calculates
+	// 	the pixel value by interpolating the values of the pixels
+	// 	around it.
+	//
+	// 	For example, to calculate the value of pixel q, the algorithm
+	// 	reads the values of the pixels v1, v2, v3, v4 and then calculates
+	// 	the value of q1 and q2 by interpolating the values of v1, v2 and v3, v4.
+	// 	Then it calculates the value of q by interpolating the values of q1 and q2.
+	//
 	for i := 0; i < newPoint.X; i++ {
 		for j := 0; j < newPoint.Y; j++ {
 			x := float64(i) * scalefactor
@@ -91,20 +118,8 @@ func Resize(img image.Image, newPoint image.Point) (image.Image, error) {
 
 			var q color.RGBA
 			var r, g, b, a uint32
-			/*
-			* Visual repesantation of values used below
-			*
-			* 	v1----------q2---------v2
-			*	|			|			|
-			*	|			q			|
-			*	|			|			|
-			* 	v3----------q1---------v4
-			 */
 
 			if (xCeil == xFloor) && (yCeil == yFloor) {
-				// r32, g32, b32, a32 := img.At(int(x), int(y)).RGBA()
-				// r, g, b, a = uint8(r32/256), uint8(g32/256), uint8(b32/256), uint8(a32/256)
-
 				r, g, b, a := img.At(int(x), int(y)).RGBA()
 
 				q = color.RGBA{
@@ -114,11 +129,10 @@ func Resize(img image.Image, newPoint image.Point) (image.Image, error) {
 					A: uint8(a),
 				}
 
-			} else if xCeil == xFloor {
+			} else if xCeil == xFloor { //
 				q1 := img.At(int(x), int(yFloor))
 				q2 := img.At(int(x), int(yCeil))
 
-				// color.RGBA() returns all color as individual values
 				r1, g1, b1, a1 := q1.RGBA()
 				r2, g2, b2, a2 := q2.RGBA()
 
@@ -191,31 +205,33 @@ func Resize(img image.Image, newPoint image.Point) (image.Image, error) {
 	return ResizedImg, nil
 }
 
-// func main() {
-// 	log.Println("Start")
-// 	fmt.Println("Loading img...")
-// 	originaImg, err := LoadImage("/home/el/Documents/go_gallery/image-1.jpg")
-// 	if err != nil {
-// 		fmt.Println("Couldn't load image")
-// 		return
-// 	}
+/*
+func main() {
+	log.Println("Start")
+	fmt.Println("Loading img...")
+	originaImg, err := LoadImage("/home/el/Documents/go_gallery/image-1.jpg")
+	if err != nil {
+		fmt.Println("Couldn't load image")
+		return
+	}
 
-// 	fmt.Println("Calculating new bounds")
-// 	point, err := GetNewBounds(originaImg, 1_000_000)
-// 	if err != nil {
-// 		fmt.Println("Error while calculating new bounds")
-// 		return
-// 	}
+	fmt.Println("Calculating new bounds")
+	point, err := GetNewBounds(originaImg, 1_000_000)
+	if err != nil {
+		fmt.Println("Error while calculating new bounds")
+		return
+	}
 
-// 	fmt.Println("Resizing image")
-// 	newImg, err := Resize(originaImg, point)
-// 	if err != nil {
-// 		fmt.Println("Error while resizing image: ", err)
-// 		return
-// 	}
+	fmt.Println("Resizing image")
+	newImg, err := Resize(originaImg, point)
+	if err != nil {
+		fmt.Println("Error while resizing image: ", err)
+		return
+	}
 
-// 	fmt.Println("Saving image")
-// 	SaveImage(newImg, "/home/el/Documents/go_gallery/test.jpg")
-// 	fmt.Println("Done!")
-// 	log.Println("End")
-// }
+	fmt.Println("Saving image")
+	SaveImage(newImg, "/home/el/Documents/go_gallery/test.jpg")
+	fmt.Println("Done!")
+	log.Println("End")
+}
+*/
