@@ -23,7 +23,7 @@ func Show() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 1)
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<div class=\"flex flex-col justify-center items-center gap-8 sm:gap-4 h-full\"><h1 class=\"font-semibold text-6xl sm:text-8xl tracking-tight text-center\">GOLLERY</h1><p class=\"text-2xl font-lato mx-4 max-w-xl sm:text-3xl text-center leading-10\">The photograph gallery implemented in <b>Go</b>, <b>HTMX</b> and <b>Tailwind CSS</b></p></div>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

@@ -8,7 +8,7 @@ Website for viewing photographs
 
 Follow the instructions on the [official website](https://golang.org/doc/install)
 
-Add following path to your **.profile** 
+Add following path to your **.profile**:
 
 ```bash
 export PATH=$PATH:/usr/local/go/bin
@@ -31,13 +31,20 @@ Run the following command to start the server
 air
 ```
 
-
 ### Install templ
 
 templ is a tool for generating Go templates. Install it using the following command
 
 ```bash
 go install github.com/a-h/templ/cmd/templ@latest
+```
+
+### Install sqlc
+
+**sqlc** is a tool for generating Go code from SQL queries. Install it using the following command
+
+```bash
+go install github.com/sqlc-dev/sqlc/cmd/sqlc@latest
 ```
 
 ### Install Node.js

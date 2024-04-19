@@ -1,7 +1,3 @@
-CREATE DATABASE gollery;
-
-use gollery;
-
 CREATE TABLE `user` (
   `user_id` int unsigned NOT NULL AUTO_INCREMENT,
   `username` varchar(45) NOT NULL,
@@ -12,7 +8,7 @@ CREATE TABLE `user` (
   UNIQUE KEY `user_id_UNIQUE` (`user_id`),
   UNIQUE KEY `username_UNIQUE` (`username`),
   UNIQUE KEY `email_UNIQUE` (`email`)
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+);
 
 CREATE TABLE `photo` (
   `photo_id` int unsigned NOT NULL AUTO_INCREMENT,
@@ -25,4 +21,4 @@ CREATE TABLE `photo` (
   UNIQUE KEY `photo_id_UNIQUE` (`photo_id`),
   KEY `fk_photo_user_idx` (`user_id`),
   CONSTRAINT `fk_photo_user` FOREIGN KEY (`user_id`) REFERENCES `user` (`user_id`) ON DELETE NO ACTION ON UPDATE NO ACTION
-) ENGINE=InnoDB AUTO_INCREMENT=1 DEFAULT CHARSET=utf8;
+);
