@@ -11,49 +11,30 @@ import (
 	"github.com/labstack/echo/v4/middleware"
 )
 
-// type CustomContext struct {
-// 	echo.Context
-// 	*models.Queries
-// }
-
 func main() {
 
 	app := echo.New()
-
-	app.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
-		queries, err := getQueryEngine()
-		if err != nil {
-			log.Fatal(err)
-		}
-		return func(c echo.Context) error {
-			cc := handler.CustomContext{
-				Context: c,
-				Queries: queries,
-			}
-			return next(cc)
-		}
-	})
 
 	app.Static("/static", "static")
 
 	app.Use(middleware.Logger())
 
-	_, err := getQueryEngine()
+	queries, err := getQueryEngine()
 	if err != nil {
 		log.Fatal(err)
 	}
 
-	homeHandler := handler.HomeHandler{}
-	galleryHandler := handler.GalleryHandler{}
-	creatorshandler := handler.CreatorsHandler{}
+	routeHandler := handler.RouteHandler{
+		Queries: queries,
+	}
 
-	app.GET("/", homeHandler.HandleHomeShow)
+	app.GET("/", routeHandler.HomeShow)
 
-	app.GET("/gallery", galleryHandler.HandleGalleryShow)
+	app.GET("/gallery", routeHandler.GalleryShow)
 
-	app.GET("/photos/:imageID", galleryHandler.HandlePhotoShow)
+	app.GET("/photos/:imageID", routeHandler.PhotoShow)
 
-	app.GET("/creators", creatorshandler.HandlePhotographerShow)
+	app.GET("/creators", routeHandler.PhotographerShow)
 
 	app.Logger.Fatal(app.Start(":8081"))
 }

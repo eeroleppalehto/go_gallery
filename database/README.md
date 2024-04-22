@@ -1,4 +1,4 @@
-# Isntruction
+# Instruction
 
 Command to run the docker container:
 
