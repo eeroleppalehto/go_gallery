@@ -36,6 +36,11 @@ func main() {
 
 	app.GET("/creators", routeHandler.PhotographerShow)
 
+	app.GET("/login", routeHandler.LoginForm)
+	app.POST("login", routeHandler.Login)
+
+	app.POST("/logout", routeHandler.Logout)
+
 	app.GET("/sign-up", routeHandler.SignupShow)
 	app.POST("/sign-up", routeHandler.Signup)
 
