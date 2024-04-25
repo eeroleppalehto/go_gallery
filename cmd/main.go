@@ -36,6 +36,9 @@ func main() {
 
 	app.GET("/creators", routeHandler.PhotographerShow)
 
+	app.GET("/sign-up", routeHandler.SignupShow)
+	app.POST("/sign-up", routeHandler.Signup)
+
 	app.Logger.Fatal(app.Start(":8081"))
 }
 
