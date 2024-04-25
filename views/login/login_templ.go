@@ -23,7 +23,7 @@ func LoginForm() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 1)
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<section class=\"min-w-80 flex flex-col flex-1 items-center justify-center h-full\"><div class=\"flex flex-col gap-8 p-4 bg-zinc-300 dark:bg-zinc-600 rounded-md shadow-md\"><form hx-post=\"/login\" hx-target=\"#content-area\" class=\"flex flex-col items-start gap-2 w-full\"><div class=\"\"><label for=\"username\">Username</label> <input type=\"text\" name=\"username\" id=\"username\" class=\"w-full\" required></div><div><label for=\"password\">Password</label> <input type=\"text\" name=\"password\" id=\"password\" class=\"w-full\" required></div><button type=\"submit\" class=\"bg-zinc-700 text-zinc-200 dark:bg-zinc-200 dark:text-zinc-700 py-1 px-2 mt-2 rounded-md\">Login</button></form><div class=\"flex flex-col items-start\"><p class=\"\">New to GOLLERY?</p><a href=\"/sign-up\" hx-get=\"/sign-up\" hx-target=\"#content-area\" hx-push-url=\"true\" type=\"button\" class=\"bg-amber-600 text-zinc-200 p-2 rounded-md\">Create Account</a></div></div></section>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -47,7 +47,7 @@ func Success() templ.Component {
 			templ_7745c5c3_Var2 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 2)
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<section><h1>Welcome back INSERT_USERNAME</h1></section>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

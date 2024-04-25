@@ -23,12 +23,12 @@ func Navbar(IsAuthenticated bool, Username string) templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 1)
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<nav><div class=\"max-w-7xl mx-2 min-m flex justify-between items-center py-4 xl:mx-auto\"><a hx-get=\"/\" hx-target=\"#content-area\" hx-push-url=\"true\" class=\"cursor-pointer\">GOLLERY</a><div class=\"flex gap-8\"><button id=\"theme-button\"><svg id=\"theme-icon\" xmlns=\"http://www.w3.org/2000/svg\" height=\"24\" viewBox=\"0 -960 960 960\" width=\"24\"><path d=\"M480-120q-150 0-255-105T120-480q0-150 105-255t255-105q14 0 27.5 1t26.5 3q-41 29-65.5 75.5T444-660q0 90 63 153t153 63q55 0 101-24.5t75-65.5q2 13 3 26.5t1 27.5q0 150-105 255T480-120Zm0-80q88 0 158-48.5T740-375q-20 5-40 8t-40 3q-123 0-209.5-86.5T364-660q0-20 3-40t8-40q-78 32-126.5 102T200-480q0 116 82 198t198 82Zm-10-270Z\"></path></svg></button> <a id=\"nav-link-home\" href=\"/\" hx-get=\"/\" hx-target=\"#content-area\" hx-push-url=\"true\" class=\"cursor-pointer\">Home</a> <a id=\"nav-link-gallery\" href=\"/gallery\" hx-get=\"/gallery\" hx-target=\"#content-area\" hx-push-url=\"true\" class=\"cursor-pointer\">Gallery</a> ")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
 		if IsAuthenticated {
-			templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 2)
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<p>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
@@ -41,17 +41,17 @@ func Navbar(IsAuthenticated bool, Username string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 3)
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</p><a id=\"logout\" hx-post=\"/logout\" hx-target=\"#content-area\" class=\"cursor-pointer\">Logout</a>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		} else {
-			templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 4)
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<a id=\"nav-link-gallery\" href=\"/login\" hx-get=\"/login\" hx-target=\"#content-area\" hx-push-url=\"true\" class=\"cursor-pointer\">Login</a>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
 		}
-		templ_7745c5c3_Err = templ.WriteWatchModeString(templ_7745c5c3_Buffer, 5)
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</div></div></nav><hr class=\"h-0.5 mx-4 border-y-0 bg-gradient-to-r from-zinc-200  via-zinc-700 to-zinc-200 dark:from-zinc-700 dark:via-zinc-200 dark:to-zinc-700  mb-4\"><script>\n        document.getElementById('theme-button').addEventListener('click', changeTheme);\n\n        const html = document.querySelector('html');\n        let isDark = html.classList.contains('dark');\n\n        function changeTheme() {\n            const themeIcon = document.getElementById('theme-icon');\n            const themeButton = document.getElementById('theme-button');\n\n            if (html.classList.contains('dark')) {\n                html.classList.remove('dark');\n                themeIcon.innerHTML = '<path d=\"M480-120q-150 0-255-105T120-480q0-150 105-255t255-105q14 0 27.5 1t26.5 3q-41 29-65.5 75.5T444-660q0 90 63 153t153 63q55 0 101-24.5t75-65.5q2 13 3 26.5t1 27.5q0 150-105 255T480-120Zm0-80q88 0 158-48.5T740-375q-20 5-40 8t-40 3q-123 0-209.5-86.5T364-660q0-20 3-40t8-40q-78 32-126.5 102T200-480q0 116 82 198t198 82Zm-10-270Z\"/>'\n            } else {\n                html.classList.add('dark');\n                themeIcon.innerHTML = '<path d=\"M480-360q50 0 85-35t35-85q0-50-35-85t-85-35q-50 0-85 35t-35 85q0 50 35 85t85 35Zm0 80q-83 0-141.5-58.5T280-480q0-83 58.5-141.5T480-680q83 0 141.5 58.5T680-480q0 83-58.5 141.5T480-280ZM200-440H40v-80h160v80Zm720 0H760v-80h160v80ZM440-760v-160h80v160h-80Zm0 720v-160h80v160h-80ZM256-650l-101-97 57-59 96 100-52 56Zm492 496-97-101 53-55 101 97-57 59Zm-98-550 97-101 59 57-100 96-56-52ZM154-212l101-97 55 53-97 101-59-57Zm326-268Z\"/>';\n            }\n        }\n\n        const navLinkHome = document.getElementById('nav-link-home');\n        const navLinkGallery = document.getElementById('nav-link-gallery');\n        const currentPageNavLinkStyles = ['text-zinc-500', 'dark:text-zinc-400',  'underline'];\n\n        navLinkHome.addEventListener('click', () => handleNavigation(\"/\"));\n        navLinkGallery.addEventListener('click', () => handleNavigation(\"/gallery\"));\n\n        handleNavigation(document.location.pathname)\n\n        function handleNavigation(path) {\n\n            if (path === '/') {\n                navLinkHome.classList.add(...currentPageNavLinkStyles);\n                navLinkGallery.classList.remove(...currentPageNavLinkStyles);\n            } else if (path === '/gallery') {\n                navLinkHome.classList.remove(...currentPageNavLinkStyles);\n                navLinkGallery.classList.add(...currentPageNavLinkStyles);\n            }\n        }\n    </script>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
