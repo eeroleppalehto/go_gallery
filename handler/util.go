@@ -16,9 +16,35 @@ func render(c echo.Context, component templ.Component) error {
 	if c.Request().Header.Get("Hx-Request") == "true" {
 		return component.Render(c.Request().Context(), c.Response())
 	}
-	return layout.Base(component).Render(c.Request().Context(), c.Response())
+	cc := c.(*AuthContext)
+	auth := cc.IsAuthenticated()
+	return layout.Base(component, auth.IsAuthenticated, auth.Username).Render(c.Request().Context(), c.Response())
 }
 
 func NotFound(c echo.Context) error {
 	return render(c, notFound.Show())
+}
+
+type AuthContext struct {
+	echo.Context
+}
+
+type AuthStatus struct {
+	IsAuthenticated bool
+	Username        string
+}
+
+func (c *AuthContext) IsAuthenticated() AuthStatus {
+	_, err := c.Cookie("token")
+	if err != nil {
+		return AuthStatus{
+			false,
+			"",
+		}
+	}
+
+	return AuthStatus{
+		false,
+		"",
+	}
 }

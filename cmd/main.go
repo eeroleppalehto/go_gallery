@@ -7,15 +7,27 @@ import (
 	"github.com/eeroleppalehto/go_gallery/handler"
 	"github.com/eeroleppalehto/go_gallery/models"
 	_ "github.com/go-sql-driver/mysql"
+	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
 	"github.com/labstack/echo/v4/middleware"
 )
 
 func main() {
+	err := godotenv.Load()
+	if err != nil {
+		log.Fatal("Error while loading variables from .env: ", err)
+	}
 
 	app := echo.New()
 
 	app.Static("/static", "static")
+
+	app.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
+		return func(c echo.Context) error {
+			cc := &handler.AuthContext{Context: c}
+			return next(cc)
+		}
+	})
 
 	app.Use(middleware.Logger())
 

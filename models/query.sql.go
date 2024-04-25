@@ -47,6 +47,17 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (sql.Res
 	return q.db.ExecContext(ctx, createUser, arg.Username, arg.Email, arg.Password)
 }
 
+const emailExists = `-- name: EmailExists :one
+SELECT EXISTS(SELECT 1 FROM user WHERE email = ?)
+`
+
+func (q *Queries) EmailExists(ctx context.Context, email string) (bool, error) {
+	row := q.db.QueryRowContext(ctx, emailExists, email)
+	var exists bool
+	err := row.Scan(&exists)
+	return exists, err
+}
+
 const getPhoto = `-- name: GetPhoto :one
 SELECT photo_id, user_id, title, description, filename, date FROM photo WHERE photo_id = ?
 `
@@ -99,6 +110,57 @@ func (q *Queries) GetPhotos(ctx context.Context) ([]Photo, error) {
 	return items, nil
 }
 
+const getUserByEmail = `-- name: GetUserByEmail :one
+SELECT user_id, username, email, password, creted_at FROM user WHERE email = ?
+`
+
+func (q *Queries) GetUserByEmail(ctx context.Context, email string) (User, error) {
+	row := q.db.QueryRowContext(ctx, getUserByEmail, email)
+	var i User
+	err := row.Scan(
+		&i.UserID,
+		&i.Username,
+		&i.Email,
+		&i.Password,
+		&i.CretedAt,
+	)
+	return i, err
+}
+
+const getUserById = `-- name: GetUserById :one
+SELECT user_id, username, email, password, creted_at FROM user WHERE user_id = ?
+`
+
+func (q *Queries) GetUserById(ctx context.Context, userID uint32) (User, error) {
+	row := q.db.QueryRowContext(ctx, getUserById, userID)
+	var i User
+	err := row.Scan(
+		&i.UserID,
+		&i.Username,
+		&i.Email,
+		&i.Password,
+		&i.CretedAt,
+	)
+	return i, err
+}
+
+const getUserByUsername = `-- name: GetUserByUsername :one
+SELECT user_id, username, email, password, creted_at FROM user WHERE username = ?
+`
+
+func (q *Queries) GetUserByUsername(ctx context.Context, username string) (User, error) {
+	row := q.db.QueryRowContext(ctx, getUserByUsername, username)
+	var i User
+	err := row.Scan(
+		&i.UserID,
+		&i.Username,
+		&i.Email,
+		&i.Password,
+		&i.CretedAt,
+	)
+	return i, err
+}
+
 const getUsers = `-- name: GetUsers :many
 SELECT user_id, username, email, password, creted_at FROM user
 `
@@ -130,4 +192,15 @@ func (q *Queries) GetUsers(ctx context.Context) ([]User, error) {
 		return nil, err
 	}
 	return items, nil
+}
+
+const usernameExists = `-- name: UsernameExists :one
+SELECT EXISTS(SELECT 1 FROM user WHERE username = ?)
+`
+
+func (q *Queries) UsernameExists(ctx context.Context, username string) (bool, error) {
+	row := q.db.QueryRowContext(ctx, usernameExists, username)
+	var exists bool
+	err := row.Scan(&exists)
+	return exists, err
 }
