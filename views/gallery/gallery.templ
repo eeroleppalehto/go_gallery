@@ -5,7 +5,7 @@ import (
 	"github.com/eeroleppalehto/go_gallery/models"
 )
 
-templ Show(images []models.Image) {
+templ Show(images []models.Photo) {
 	<div class="flex flex-col flex-wrap max-w-7xl mx-auto items-center">
 		<h1 class="text-5xl p-12">Browse all photographs</h1>
 		<section id="images" class="flex flex-wrap max-w-7xl mx-auto gap-1 bg-zinc-300 dark:bg-zinc-600">
@@ -39,15 +39,17 @@ templ Show(images []models.Image) {
     </script>
 }
 
-templ Image(image models.Image) {
-	<a hx-get={ fmt.Sprintf("/photos/%d", image.ID) } hx-target="#content-area" hx-push-url="true" id={ fmt.Sprintf("%d", image.ID) } class="h-96 flex-grow overflow-hidden hover:overflow-y-clip cursor-pointer">
+templ Image(image models.Photo) {
+	<a hx-get={ fmt.Sprintf("/photos/%d", image.PhotoID) } hx-target="#content-area" hx-push-url="true" id={ fmt.Sprintf("%d", image.PhotoID) } class="h-96 flex-grow overflow-hidden hover:overflow-y-clip cursor-pointer">
 		<img
-			src={ fmt.Sprintf("/static/images-lq/%s", image.FilenameLQ) }
+			src={ fmt.Sprintf("/static/images-lq/%s", image.Filename) }
 			class="min-w-full max-h-full object-cover align-bottom blur-0 hover:blur-sm transition-all duration-300 ease-in-out"
 		/>
-		<div id={ fmt.Sprintf("image-%d", image.ID) } class="w-full h-full p-2 bg-zinc-600 text-zinc-200 opacity-0 duration-300 ease-in-out">
+		<div id={ fmt.Sprintf("image-%d", image.PhotoID) } class="w-full h-full p-2 bg-zinc-600 text-zinc-200 opacity-0 duration-300 ease-in-out">
 			<h2 class="text-xl">{ image.Title }</h2>
-			<p class="font-lato mt-1">{ image.Description }</p>
+			if image.Description.Valid {
+				<p class="font-lato mt-1">{ image.Description.String }</p>
+			}
 		</div>
 	</a>
 }

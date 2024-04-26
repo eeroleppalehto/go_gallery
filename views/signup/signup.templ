@@ -1,0 +1,102 @@
+package signup
+
+// import "github.com/eeroleppalehto/go_gallery/handler"
+
+type FormError int
+
+const (
+	None FormError = iota
+	InvalidUsername
+	UsernameExists
+	InvalidEmail
+	EmailExists
+	PasswordsDontMatch
+	UnknownError
+)
+
+func (f FormError) String() string {
+	return [...]string{
+		"None",
+		"InvalidUsername",
+		"UsernameExists",
+		"InvalidEmail",
+		"EmailExists",
+		"PasswordsDontMatch",
+		"UnknownError",
+	}[f]
+}
+
+func (f FormError) Value() int {
+	return int(f)
+}
+
+type SignupForm struct {
+	Username        string
+	Email           string
+	Password        string
+	ConfirmPassword string
+	FormError
+}
+
+func NewSignupForm() SignupForm {
+	return SignupForm{
+		Username:        "",
+		Email:           "",
+		Password:        "",
+		ConfirmPassword: "",
+		FormError:       None,
+	}
+}
+
+templ Form(sf SignupForm) {
+	<section class="min-w-80  flex flex-col flex-1 items-center justify-center h-full">
+		<div class="flex  bg-zinc-300 dark:bg-zinc-600 rounded-md shadow-md">
+			<form hx-post="/sign-up" hx-target="#content-area" class="flex flex-col items-start p-8 gap-4">
+				<div class="flex flex-col w-full">
+					<label for="username">Username</label>
+					<input type="text" value={ sf.Username } name="username" id="username" class="w-full min-w-52" required/>
+				</div>
+				<div class="flex flex-col w-full">
+					<label for="email">Email</label>
+					<input type="email" value={ sf.Email } name="email" id="email" class="w-full" required/>
+				</div>
+				<div class="flex flex-col w-full">
+					<label for="password">Password</label>
+					<input type="password" value={ sf.Password } name="password" id="password" class="w-full" required/>
+				</div>
+				<div class="flex flex-col w-full">
+					<label for="confirm-password">Confirm Password</label>
+					<input type="password" value={ sf.ConfirmPassword } name="confirm-password" id="confirm-password" class="w-full" required/>
+				</div>
+				if sf.FormError.Value() != 0 {
+					<p class="text-red-600">
+						{ sf.FormError.String() }
+					</p>
+				}
+				<button
+					type="submit"
+					class="w-full bg-amber-600 text-zinc-200 p-2 mt-4 rounded-md"
+				>
+					Sign Up
+				</button>
+			</form>
+			<img src="/static/images/sign-up-img.jpg" class="min-w-40 max-w-80 object-cover rounded-md tra"/>
+		</div>
+	</section>
+}
+
+templ Success(username string) {
+	<section class="min-w-80  flex flex-col flex-1 items-center justify-center h-full">
+		<div class="flex flex-col  bg-zinc-300 dark:bg-zinc-600 rounded-md shadow-md p-16 gap-4">
+			<h1 class="text-4xl">Welcome { username }!</h1>
+			<div class="text-xl">
+				<p>
+					Your account creation was successful.
+				</p>
+				<p>
+					Proceed to login with your credentials.
+				</p>
+			</div>
+		</div>
+	</section>
+}

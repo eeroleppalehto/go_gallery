@@ -5,10 +5,12 @@ import (
 	"fmt"
 )
 
-templ Show(image models.Image) {
+templ Show(image models.Photo) {
 	<section class="flex flex-col max-w-7xl mx-auto items-center gap-4 h-full">
 		<img class="h-2/3 object-contain shadow-lg" src={ fmt.Sprintf("/static/images/%s", image.Filename) } alt={ image.Title }/>
 		<h1 class="text-3xl font-bold">{ image.Title }</h1>
-		<p>{ image.Description }</p>
+		if image.Description.Valid {
+			<p>{ image.Description.String }</p>
+		}
 	</section>
 }

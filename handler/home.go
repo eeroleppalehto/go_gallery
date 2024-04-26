@@ -8,6 +8,7 @@ import (
 type HomeHandler struct {
 }
 
-func (h *HomeHandler) HandleHomeShow(c echo.Context) error {
+func (r *RouteHandler) HomeShow(c echo.Context) error {
+
 	return render(c, home.Show())
 }

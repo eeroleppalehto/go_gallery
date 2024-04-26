@@ -2,7 +2,7 @@ package layout
 
 import "github.com/eeroleppalehto/go_gallery/views/partials"
 
-templ Base(children templ.Component) {
+templ Base(children templ.Component, IsAuthenticated bool, Username string) {
 	<!DOCTYPE html>
 	<html class="h-full" lang="en">
 		<head>
@@ -28,7 +28,7 @@ templ Base(children templ.Component) {
 		<body
 			class="bg-zinc-200 dark:bg-zinc-700 font-oswald text-zinc-700 dark:text-zinc-200 fill-zinc-700 dark:fill-zinc-200 h-5/6"
 		>
-			@partials.Navbar()
+			@partials.Navbar(IsAuthenticated, Username)
 			<main id="content-area" class="flex flex-col h-full">
 				@children
 			</main>

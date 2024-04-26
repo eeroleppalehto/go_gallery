@@ -1,21 +1,15 @@
 package handler
 
 import (
-	"github.com/eeroleppalehto/go_gallery/models"
 	"github.com/eeroleppalehto/go_gallery/views/creators"
 	"github.com/labstack/echo/v4"
 )
 
-type CreatorsHandler struct{}
-
-func (h *CreatorsHandler) HandlePhotographerShow(c echo.Context) error {
-
-	user := models.User{
-		ID:       1,
-		Username: "Sabber",
-		Email:    "",
-		Password: "",
+func (r *RouteHandler) PhotographerShow(c echo.Context) error {
+	users, err := r.Queries.GetUsers(c.Request().Context())
+	if err != nil {
+		return c.String(404, "Failed to fetch users")
 	}
 
-	return render(c, creators.Show(user))
+	return render(c, creators.Show(users[0]))
 }

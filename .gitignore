@@ -28,3 +28,6 @@ tmp/
 
 # Templ watch mode files
 views/**/*.txt
+
+# env file
+.env
