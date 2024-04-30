@@ -41,6 +41,8 @@ func main() {
 	app.GET("/gallery", routeHandler.GalleryShow)
 
 	app.GET("/photos/:imageID", routeHandler.PhotoShow)
+	app.GET("/photos/add-new", routeHandler.PhotoForm)
+	app.POST("/photos/add-new", routeHandler.PostPhoto)
 
 	app.GET("/creators", routeHandler.PhotographerShow)
 
