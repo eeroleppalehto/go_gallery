@@ -14,6 +14,7 @@ templ Navbar(IsAuthenticated bool, Username string) {
 					<p>
 						{ Username }
 					</p>
+					<a id="add-photo" hx-get="/photos/add-new" hx-target="#content-area" hx-push-url="true" class="cursor-pointer">Add new photo</a>
 					<a id="logout" hx-post="/logout" hx-target="#content-area" class="cursor-pointer">Logout</a>
 				} else {
 					<a id="nav-link-gallery" href="/login" hx-get="/login" hx-target="#content-area" hx-push-url="true" class="cursor-pointer">Login</a>

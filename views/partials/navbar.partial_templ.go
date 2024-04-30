@@ -41,7 +41,7 @@ func Navbar(IsAuthenticated bool, Username string) templ.Component {
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
-			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</p><a id=\"logout\" hx-post=\"/logout\" hx-target=\"#content-area\" class=\"cursor-pointer\">Logout</a>")
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</p><a id=\"add-photo\" hx-get=\"/photos/add-new\" hx-target=\"#content-area\" hx-push-url=\"true\" class=\"cursor-pointer\">Add new photo</a> <a id=\"logout\" hx-post=\"/logout\" hx-target=\"#content-area\" class=\"cursor-pointer\">Logout</a>")
 			if templ_7745c5c3_Err != nil {
 				return templ_7745c5c3_Err
 			}
