@@ -13,7 +13,7 @@ type RouteHandler struct {
 	Sessions *authservice.SessionService
 }
 
-func render(c echo.Context, component templ.Component) error {
+func (r *RouteHandler) render(c echo.Context, component templ.Component) error {
 	if c.Request().Header.Get("Hx-Request") == "true" {
 		return component.Render(c.Request().Context(), c.Response())
 	}

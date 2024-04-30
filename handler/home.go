@@ -10,5 +10,5 @@ type HomeHandler struct {
 
 func (r *RouteHandler) HomeShow(c echo.Context) error {
 
-	return render(c, home.Show())
+	return r.render(c, home.Show())
 }

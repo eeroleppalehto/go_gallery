@@ -8,7 +8,7 @@ import (
 )
 
 func (r *RouteHandler) SignupShow(c echo.Context) error {
-	return render(c, signup.Form(signup.NewSignupForm()))
+	return r.render(c, signup.Form(signup.NewSignupForm()))
 }
 
 func (r *RouteHandler) Signup(c echo.Context) error {
@@ -25,12 +25,12 @@ func (r *RouteHandler) Signup(c echo.Context) error {
 	if err != nil {
 		c.Response().Status = 500
 		signupForm.FormError = signup.UnknownError
-		return render(c, signup.Form(signupForm))
+		return r.render(c, signup.Form(signupForm))
 	}
 	if usernameExists {
 		c.Response().Status = 422
 		signupForm.FormError = signup.UsernameExists
-		return render(c, signup.Form(signupForm))
+		return r.render(c, signup.Form(signupForm))
 	}
 
 	// Check if email exists
@@ -38,19 +38,19 @@ func (r *RouteHandler) Signup(c echo.Context) error {
 	if err != nil {
 		c.Response().Status = 500
 		signupForm.FormError = signup.UnknownError
-		return render(c, signup.Form(signupForm))
+		return r.render(c, signup.Form(signupForm))
 	}
 	if emailExists {
 		c.Response().Status = 422
 		signupForm.FormError = signup.EmailExists
-		return render(c, signup.Form(signupForm))
+		return r.render(c, signup.Form(signupForm))
 	}
 
 	// Check if passwords match
 	if signupForm.Password != signupForm.ConfirmPassword {
 		c.Response().Status = 422
 		signupForm.FormError = signup.PasswordsDontMatch
-		return render(c, signup.Form(signupForm))
+		return r.render(c, signup.Form(signupForm))
 	}
 
 	// TODO: Password validation
@@ -59,7 +59,7 @@ func (r *RouteHandler) Signup(c echo.Context) error {
 	if err != nil {
 		c.Response().Status = 500
 		signupForm.FormError = signup.UnknownError
-		return render(c, signup.Form(signupForm))
+		return r.render(c, signup.Form(signupForm))
 	}
 	_, err = r.Queries.CreateUser(c.Request().Context(), models.CreateUserParams{
 		Username: signupForm.Username,
@@ -69,10 +69,10 @@ func (r *RouteHandler) Signup(c echo.Context) error {
 	if err != nil {
 		c.Response().Status = 500
 		signupForm.FormError = signup.UnknownError
-		return render(c, signup.Form(signupForm))
+		return r.render(c, signup.Form(signupForm))
 	}
 
-	return render(c, signup.Success(signupForm.Username))
+	return r.render(c, signup.Success(signupForm.Username))
 }
 
 // TODO: Is this worth?
