@@ -40,7 +40,7 @@ func (r *RouteHandler) PostPhoto(c echo.Context) error {
 	fileExtension := "jpg"
 
 	imgServ := imageservice.ImageService{}
-	imgServ.JPG.LoadImageM(src)
+	imgServ.JPG.LoadImageFromReader(src)
 
 	dst, err := os.Create(file.Filename)
 	if err != nil {
