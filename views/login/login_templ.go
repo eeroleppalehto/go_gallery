@@ -10,7 +10,23 @@ import "context"
 import "io"
 import "bytes"
 
-func LoginForm() templ.Component {
+type LoginForm struct {
+	Username   string
+	Password   string
+	IsSuccess  bool
+	LoginError bool
+}
+
+func NewLoginForm() LoginForm {
+	return LoginForm{
+		Username:   "",
+		Password:   "",
+		IsSuccess:  false,
+		LoginError: false,
+	}
+}
+
+func Form(lf LoginForm) templ.Component {
 	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
 		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
 		if !templ_7745c5c3_IsBuffer {
@@ -23,7 +39,17 @@ func LoginForm() templ.Component {
 			templ_7745c5c3_Var1 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<section class=\"min-w-80 flex flex-col flex-1 items-center justify-center h-full\"><div class=\"flex flex-col gap-8 p-4 bg-zinc-300 dark:bg-zinc-600 rounded-md shadow-md\"><form hx-post=\"/login\" hx-target=\"#content-area\" class=\"flex flex-col items-start gap-2 w-full\"><div class=\"\"><label for=\"username\">Username</label> <input type=\"text\" name=\"username\" id=\"username\" class=\"w-full\" required></div><div><label for=\"password\">Password</label> <input type=\"text\" name=\"password\" id=\"password\" class=\"w-full\" required></div><button type=\"submit\" class=\"bg-zinc-700 text-zinc-200 dark:bg-zinc-200 dark:text-zinc-700 py-1 px-2 mt-2 rounded-md\">Login</button></form><div class=\"flex flex-col items-start\"><p class=\"\">New to GOLLERY?</p><a href=\"/sign-up\" hx-get=\"/sign-up\" hx-target=\"#content-area\" hx-push-url=\"true\" type=\"button\" class=\"bg-amber-600 text-zinc-200 p-2 rounded-md\">Create Account</a></div></div></section>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<section class=\"min-w-80 flex flex-col flex-1 items-center justify-center h-full\"><div class=\"flex flex-col gap-8 p-4 bg-zinc-300 dark:bg-zinc-600 rounded-md shadow-md\"><form hx-post=\"/login\" hx-target=\"#content-area\" class=\"flex flex-col items-start gap-2 w-full\"><div class=\"\"><label for=\"username\">Username</label> <input type=\"text\" name=\"username\" id=\"username\" class=\"w-full\" required></div><div><label for=\"password\">Password</label> <input type=\"password\" name=\"password\" id=\"password\" class=\"w-full\" required></div><button type=\"submit\" class=\"bg-zinc-700 text-zinc-200 dark:bg-zinc-200 dark:text-zinc-700 py-1 px-2 mt-2 rounded-md\">Login</button></form><div class=\"flex flex-col items-start\"><p class=\"\">New to GOLLERY?</p><a href=\"/sign-up\" hx-get=\"/sign-up\" hx-target=\"#content-area\" hx-push-url=\"true\" type=\"button\" class=\"bg-amber-600 text-zinc-200 p-2 rounded-md\">Create Account</a></div></div>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if lf.IsSuccess {
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<script>\n                location.replace(\"/\")\n            </script>")
+			if templ_7745c5c3_Err != nil {
+				return templ_7745c5c3_Err
+			}
+		}
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("</section>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}
@@ -47,7 +73,31 @@ func Success() templ.Component {
 			templ_7745c5c3_Var2 = templ.NopComponent
 		}
 		ctx = templ.ClearChildren(ctx)
-		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<section><h1>Welcome back INSERT_USERNAME</h1></section>")
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<section><h1>Welcome back INSERT_USERNAME</h1><script>\n            location.replace(\"/\")\n        </script></section>")
+		if templ_7745c5c3_Err != nil {
+			return templ_7745c5c3_Err
+		}
+		if !templ_7745c5c3_IsBuffer {
+			_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteTo(templ_7745c5c3_W)
+		}
+		return templ_7745c5c3_Err
+	})
+}
+
+func Logout() templ.Component {
+	return templ.ComponentFunc(func(ctx context.Context, templ_7745c5c3_W io.Writer) (templ_7745c5c3_Err error) {
+		templ_7745c5c3_Buffer, templ_7745c5c3_IsBuffer := templ_7745c5c3_W.(*bytes.Buffer)
+		if !templ_7745c5c3_IsBuffer {
+			templ_7745c5c3_Buffer = templ.GetBuffer()
+			defer templ.ReleaseBuffer(templ_7745c5c3_Buffer)
+		}
+		ctx = templ.InitializeContext(ctx)
+		templ_7745c5c3_Var3 := templ.GetChildren(ctx)
+		if templ_7745c5c3_Var3 == nil {
+			templ_7745c5c3_Var3 = templ.NopComponent
+		}
+		ctx = templ.ClearChildren(ctx)
+		_, templ_7745c5c3_Err = templ_7745c5c3_Buffer.WriteString("<script>\n        location.replace(\"/\")\n    </script>")
 		if templ_7745c5c3_Err != nil {
 			return templ_7745c5c3_Err
 		}

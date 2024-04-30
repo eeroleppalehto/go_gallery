@@ -1,6 +1,22 @@
 package login
 
-templ LoginForm() {
+type LoginForm struct {
+	Username   string
+	Password   string
+	IsSuccess  bool
+	LoginError bool
+}
+
+func NewLoginForm() LoginForm {
+	return LoginForm{
+		Username:   "",
+		Password:   "",
+		IsSuccess:  false,
+		LoginError: false,
+	}
+}
+
+templ Form(lf LoginForm) {
 	<section class="min-w-80 flex flex-col flex-1 items-center justify-center h-full">
 		<div class="flex flex-col gap-8 p-4 bg-zinc-300 dark:bg-zinc-600 rounded-md shadow-md">
 			<form hx-post="/login" hx-target="#content-area" class="flex flex-col items-start gap-2 w-full">
@@ -10,7 +26,7 @@ templ LoginForm() {
 				</div>
 				<div>
 					<label for="password">Password</label>
-					<input type="text" name="password" id="password" class="w-full" required/>
+					<input type="password" name="password" id="password" class="w-full" required/>
 				</div>
 				<button type="submit" class="bg-zinc-700 text-zinc-200 dark:bg-zinc-200 dark:text-zinc-700 py-1 px-2 mt-2 rounded-md">Login</button>
 			</form>
@@ -21,6 +37,11 @@ templ LoginForm() {
 				<a href="/sign-up" hx-get="/sign-up" hx-target="#content-area" hx-push-url="true" type="button" class="bg-amber-600 text-zinc-200 p-2 rounded-md">Create Account</a>
 			</div>
 		</div>
+		if lf.IsSuccess {
+			<script>
+                location.replace("/")
+            </script>
+		}
 	</section>
 }
 
@@ -29,5 +50,14 @@ templ Success() {
 		<h1>
 			Welcome back INSERT_USERNAME
 		</h1>
+		<script>
+            location.replace("/")
+        </script>
 	</section>
+}
+
+templ Logout() {
+	<script>
+        location.replace("/")
+    </script>
 }
