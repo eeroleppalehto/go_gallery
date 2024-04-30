@@ -1,6 +1,8 @@
 package handler
 
 import (
+	"database/sql"
+
 	"github.com/a-h/templ"
 	"github.com/eeroleppalehto/go_gallery/models"
 	authservice "github.com/eeroleppalehto/go_gallery/service/authService"
@@ -9,7 +11,7 @@ import (
 )
 
 type RouteHandler struct {
-	Queries  *models.Queries
+	DB       *sql.DB
 	Sessions *authservice.SessionService
 }
 
@@ -21,6 +23,10 @@ func (r *RouteHandler) render(c echo.Context, component templ.Component) error {
 	auth := r.Sessions.IsAuthenticated(c)
 
 	return layout.Base(component, auth.IsAuthenticated, auth.Username).Render(c.Request().Context(), c.Response())
+}
+
+func getQueryEngine(db *sql.DB) *models.Queries {
+	return models.New(db)
 }
 
 // func NotFound(c echo.Context) error {

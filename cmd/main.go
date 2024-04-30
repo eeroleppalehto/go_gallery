@@ -5,7 +5,6 @@ import (
 	"log"
 
 	"github.com/eeroleppalehto/go_gallery/handler"
-	"github.com/eeroleppalehto/go_gallery/models"
 	authservice "github.com/eeroleppalehto/go_gallery/service/authService"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/joho/godotenv"
@@ -25,13 +24,13 @@ func main() {
 
 	app.Use(middleware.Logger())
 
-	queries, err := getQueryEngine()
+	db, err := sql.Open("mysql", "root:Q2werty@/gollery?parseTime=true")
 	if err != nil {
-		log.Fatal(err)
+		log.Fatal("Failed to connect to database: ", err)
 	}
 
 	routeHandler := handler.RouteHandler{
-		Queries:  queries,
+		DB:       db,
 		Sessions: &authservice.SessionService{},
 	}
 
@@ -54,15 +53,4 @@ func main() {
 	app.POST("/sign-up", routeHandler.Signup)
 
 	app.Logger.Fatal(app.Start(":8081"))
-}
-
-func getQueryEngine() (*models.Queries, error) {
-	db, err := sql.Open("mysql", "root:Q2werty@/gollery?parseTime=true")
-	if err != nil {
-		return nil, err
-	}
-
-	queries := models.New(db)
-
-	return queries, nil
 }

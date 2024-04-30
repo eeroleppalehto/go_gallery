@@ -6,7 +6,8 @@ import (
 )
 
 func (r *RouteHandler) PhotographerShow(c echo.Context) error {
-	users, err := r.Queries.GetUsers(c.Request().Context())
+	queries := getQueryEngine(r.DB)
+	users, err := queries.GetUsers(c.Request().Context())
 	if err != nil {
 		return c.String(404, "Failed to fetch users")
 	}
