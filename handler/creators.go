@@ -11,5 +11,5 @@ func (r *RouteHandler) PhotographerShow(c echo.Context) error {
 		return c.String(404, "Failed to fetch users")
 	}
 
-	return render(c, creators.Show(users[0]))
+	return r.render(c, creators.Show(users[0]))
 }

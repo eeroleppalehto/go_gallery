@@ -6,6 +6,7 @@ import (
 
 	"github.com/eeroleppalehto/go_gallery/handler"
 	"github.com/eeroleppalehto/go_gallery/models"
+	authservice "github.com/eeroleppalehto/go_gallery/service/authService"
 	_ "github.com/go-sql-driver/mysql"
 	"github.com/joho/godotenv"
 	"github.com/labstack/echo/v4"
@@ -22,13 +23,6 @@ func main() {
 
 	app.Static("/static", "static")
 
-	app.Use(func(next echo.HandlerFunc) echo.HandlerFunc {
-		return func(c echo.Context) error {
-			cc := &handler.AuthContext{Context: c}
-			return next(cc)
-		}
-	})
-
 	app.Use(middleware.Logger())
 
 	queries, err := getQueryEngine()
@@ -37,8 +31,11 @@ func main() {
 	}
 
 	routeHandler := handler.RouteHandler{
-		Queries: queries,
+		Queries:  queries,
+		Sessions: &authservice.SessionService{},
 	}
+
+	routeHandler.Sessions.Init()
 
 	app.GET("/", routeHandler.HomeShow)
 

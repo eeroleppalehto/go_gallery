@@ -14,7 +14,7 @@ func (r *RouteHandler) GalleryShow(c echo.Context) error {
 		return c.String(404, "Failed to fetch photos")
 	}
 
-	return render(c, gallery.Show(images))
+	return r.render(c, gallery.Show(images))
 }
 
 func (r *RouteHandler) PhotoShow(c echo.Context) error {
@@ -30,5 +30,5 @@ func (r *RouteHandler) PhotoShow(c echo.Context) error {
 		return c.String(404, "Image not found")
 	}
 
-	return render(c, photo.Show(photograph))
+	return r.render(c, photo.Show(photograph))
 }
