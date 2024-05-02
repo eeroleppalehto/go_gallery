@@ -26,10 +26,9 @@ templ Navbar(IsAuthenticated bool, Username string) {
 	<script>
         document.getElementById('theme-button').addEventListener('click', changeTheme);
 
-        const html = document.querySelector('html');
-        let isDark = html.classList.contains('dark');
-
         function changeTheme() {
+            let html = document.querySelector('html');
+            let isDark = html.classList.contains('dark');
             const themeIcon = document.getElementById('theme-icon');
             const themeButton = document.getElementById('theme-button');
 
@@ -42,23 +41,20 @@ templ Navbar(IsAuthenticated bool, Username string) {
             }
         }
 
-        const navLinkHome = document.getElementById('nav-link-home');
-        const navLinkGallery = document.getElementById('nav-link-gallery');
-        const currentPageNavLinkStyles = ['text-zinc-500', 'dark:text-zinc-400',  'underline'];
-
-        navLinkHome.addEventListener('click', () => handleNavigation("/"));
-        navLinkGallery.addEventListener('click', () => handleNavigation("/gallery"));
+        document.getElementById('nav-link-home').addEventListener('click', () => handleNavigation("/"));
+        document.getElementById('nav-link-gallery').addEventListener('click', () => handleNavigation("/gallery"));
 
         handleNavigation(document.location.pathname)
 
         function handleNavigation(path) {
+            const currentPageNavLinkStyles = ['text-zinc-500', 'dark:text-zinc-400',  'underline'];
 
             if (path === '/') {
-                navLinkHome.classList.add(...currentPageNavLinkStyles);
-                navLinkGallery.classList.remove(...currentPageNavLinkStyles);
+                document.getElementById('nav-link-home').classList.add(...currentPageNavLinkStyles);
+                document.getElementById('nav-link-gallery').classList.remove(...currentPageNavLinkStyles);
             } else if (path === '/gallery') {
-                navLinkHome.classList.remove(...currentPageNavLinkStyles);
-                navLinkGallery.classList.add(...currentPageNavLinkStyles);
+                document.getElementById('nav-link-home').classList.remove(...currentPageNavLinkStyles);
+                document.getElementById('nav-link-gallery').classList.add(...currentPageNavLinkStyles);
             }
         }
     </script>
