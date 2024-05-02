@@ -2,6 +2,7 @@ package gallery
 
 import (
 	"fmt"
+	s "strings"
 	"github.com/eeroleppalehto/go_gallery/models"
 )
 
@@ -43,7 +44,7 @@ templ Show(images []models.Photo) {
 templ Image(image models.Photo) {
 	<a hx-get={ fmt.Sprintf("/photos/%d", image.PhotoID) } hx-target="#content-area" hx-push-url="true" id={ fmt.Sprintf("%d", image.PhotoID) } class="h-96 flex-grow overflow-hidden hover:overflow-y-clip cursor-pointer">
 		<img
-			src={ fmt.Sprintf("/static/images-lq/%s", image.Filename) }
+			src={ fmt.Sprintf("/static/images-lq/%s", lqImageName(image.Filename)) }
 			class="min-w-full max-h-full object-cover align-bottom blur-0 hover:blur-sm transition-all duration-300 ease-in-out"
 		/>
 		<div id={ fmt.Sprintf("image-%d", image.PhotoID) } class="w-full h-full p-2 bg-zinc-600 text-zinc-200 opacity-0 duration-300 ease-in-out">
@@ -53,4 +54,8 @@ templ Image(image models.Photo) {
 			}
 		</div>
 	</a>
+}
+
+func lqImageName(filename string) string {
+	return s.Replace(filename, ".jpg", "-lq.jpg", -1)
 }
