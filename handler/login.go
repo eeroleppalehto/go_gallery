@@ -28,7 +28,9 @@ func (r *RouteHandler) Login(c echo.Context) error {
 		LoginError: false,
 	}
 
-	err := r.Sessions.Login(c, r.Queries)
+	queries := getQueryEngine(r.DB)
+
+	err := r.Sessions.Login(c, queries)
 	if err != nil {
 		form.LoginError = true
 		return r.render(c, login.Form(form))

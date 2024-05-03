@@ -9,7 +9,8 @@ import (
 )
 
 func (r *RouteHandler) GalleryShow(c echo.Context) error {
-	images, err := r.Queries.GetPhotos(c.Request().Context())
+	queries := getQueryEngine(r.DB)
+	images, err := queries.GetPhotos(c.Request().Context())
 	if err != nil {
 		return c.String(404, "Failed to fetch photos")
 	}
@@ -25,7 +26,9 @@ func (r *RouteHandler) PhotoShow(c echo.Context) error {
 		return c.String(400, "Bad request")
 	}
 
-	photograph, err := r.Queries.GetPhoto(c.Request().Context(), uint32(imageIdInt))
+	queries := getQueryEngine(r.DB)
+
+	photograph, err := queries.GetPhoto(c.Request().Context(), uint32(imageIdInt))
 	if err != nil {
 		return c.String(404, "Image not found")
 	}

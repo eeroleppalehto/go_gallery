@@ -12,6 +12,8 @@ func (r *RouteHandler) SignupShow(c echo.Context) error {
 }
 
 func (r *RouteHandler) Signup(c echo.Context) error {
+	queries := getQueryEngine(r.DB)
+
 	signupForm := signup.SignupForm{
 		Username:        c.FormValue("username"),
 		Email:           c.FormValue("email"),
@@ -21,7 +23,7 @@ func (r *RouteHandler) Signup(c echo.Context) error {
 	}
 
 	// Check if username exists
-	usernameExists, err := r.Queries.UsernameExists(c.Request().Context(), signupForm.Username)
+	usernameExists, err := queries.UsernameExists(c.Request().Context(), signupForm.Username)
 	if err != nil {
 		c.Response().Status = 500
 		signupForm.FormError = signup.UnknownError
@@ -34,7 +36,7 @@ func (r *RouteHandler) Signup(c echo.Context) error {
 	}
 
 	// Check if email exists
-	emailExists, err := r.Queries.EmailExists(c.Request().Context(), signupForm.Email)
+	emailExists, err := queries.EmailExists(c.Request().Context(), signupForm.Email)
 	if err != nil {
 		c.Response().Status = 500
 		signupForm.FormError = signup.UnknownError
@@ -61,7 +63,7 @@ func (r *RouteHandler) Signup(c echo.Context) error {
 		signupForm.FormError = signup.UnknownError
 		return r.render(c, signup.Form(signupForm))
 	}
-	_, err = r.Queries.CreateUser(c.Request().Context(), models.CreateUserParams{
+	_, err = queries.CreateUser(c.Request().Context(), models.CreateUserParams{
 		Username: signupForm.Username,
 		Email:    signupForm.Email,
 		Password: string(hashBytes),
