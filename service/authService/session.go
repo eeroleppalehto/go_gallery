@@ -1,6 +1,8 @@
 package authservice
 
 import (
+	"context"
+	"database/sql"
 	"net/http"
 
 	"github.com/eeroleppalehto/go_gallery/models"
@@ -9,7 +11,7 @@ import (
 )
 
 var (
-	key         = []byte("super-secret-key")
+	key         = []byte("super-secret-key") //TODO: Read from .env
 	cookieStore = "session"
 	store       = sessions.NewCookieStore(key)
 )
@@ -26,31 +28,48 @@ func (s *SessionService) Init() {
 	store.Options.Secure = true
 }
 
-func (s *SessionService) Login(c echo.Context, q *models.Queries) error {
-	sess, err := store.Get(c.Request(), cookieStore)
+func (s *SessionService) Login(ctx context.Context, r *http.Request, w http.ResponseWriter, db *sql.DB) int {
+	sess, err := getSession(r)
 	if err != nil {
-		c.Response().Status = http.StatusInternalServerError
-		return err
+		return http.StatusBadRequest
 	}
 
-	username := c.FormValue("username")
-	password := c.FormValue("password")
+	username := r.FormValue("username")
+	password := r.FormValue("password")
 
-	user, err := q.GetUserByUsername(c.Request().Context(), username)
+	queries := models.New(db)
+
+	user, err := queries.GetUserByUsername(ctx, username)
 	if err != nil {
-		c.Response().Status = 401
-		return err
+		return http.StatusUnauthorized
 	}
 
 	isValidPW := ComparePassowrds([]byte(user.Password), password)
 	if !isValidPW {
-		c.Response().Status = 401
-		return err
+		return http.StatusUnauthorized
 	}
 
+	err = saveSession(r, w, sess, username)
+	if err != nil {
+		return http.StatusInternalServerError
+	}
+
+	return http.StatusOK
+}
+
+func getSession(r *http.Request) (*sessions.Session, error) {
+	sess, err := store.Get(r, cookieStore)
+	if err != nil {
+		return nil, err
+	}
+
+	return sess, err
+}
+
+func saveSession(r *http.Request, w http.ResponseWriter, sess *sessions.Session, username string) error {
 	sess.Values["authenticated"] = true
 	sess.Values["username"] = username
-	sess.Save(c.Request(), c.Response())
+	sess.Save(r, w)
 	return nil
 }
 
