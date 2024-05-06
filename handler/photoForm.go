@@ -4,6 +4,7 @@ import (
 	"database/sql"
 	"fmt"
 	"net/http"
+	"os"
 	"time"
 
 	"github.com/eeroleppalehto/go_gallery/models"
@@ -90,6 +91,7 @@ func (r *RouteHandler) PostPhoto(c echo.Context) error {
 
 	err = imgServ.JPG.SaveImage(image, path+filename)
 	if err != nil {
+		os.Remove(pathLQ + filenameLowQuality)
 		return c.HTML(http.StatusInternalServerError, "Error while processing image 5"+err.Error())
 	}
 
@@ -97,6 +99,8 @@ func (r *RouteHandler) PostPhoto(c echo.Context) error {
 
 	err = tx.Commit()
 	if err != nil {
+		os.Remove(pathLQ + filenameLowQuality)
+		os.Remove(pathLQ + filename)
 		return c.HTML(http.StatusInternalServerError, "Error while commiting to DB")
 	}
 
