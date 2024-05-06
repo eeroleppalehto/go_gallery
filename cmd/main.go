@@ -2,7 +2,9 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
+	"os"
 
 	"github.com/eeroleppalehto/go_gallery/handler"
 	authservice "github.com/eeroleppalehto/go_gallery/service/authService"
@@ -24,10 +26,17 @@ func main() {
 
 	app.Use(middleware.Logger())
 
-	db, err := sql.Open("mysql", "root:Q2werty@/gollery?parseTime=true")
+	db, err := sql.Open("mysql", fmt.Sprintf("%s:%s@/gollery?parseTime=true", os.Getenv("MYSQL_USER"), os.Getenv("MYSQL_PASSWORD")))
 	if err != nil {
 		log.Fatal("Failed to connect to database: ", err)
 	}
+
+	err = db.Ping()
+	if err != nil {
+		log.Fatal("Failed to connect to database: ", err)
+	}
+
+	defer db.Close()
 
 	routeHandler := handler.RouteHandler{
 		DB:       db,

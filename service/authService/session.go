@@ -1,9 +1,9 @@
 package authservice
 
 import (
-	"context"
 	"database/sql"
 	"net/http"
+	"os"
 
 	"github.com/eeroleppalehto/go_gallery/models"
 	"github.com/gorilla/sessions"
@@ -11,7 +11,7 @@ import (
 )
 
 var (
-	key         = []byte("super-secret-key") //TODO: Read from .env
+	key         = []byte(os.Getenv("SECRET"))
 	cookieStore = "session"
 	store       = sessions.NewCookieStore(key)
 )
@@ -28,8 +28,8 @@ func (s *SessionService) Init() {
 	store.Options.Secure = true
 }
 
-func (s *SessionService) Login(ctx context.Context, r *http.Request, w http.ResponseWriter, db *sql.DB) int {
-	sess, err := getSession(r)
+func (s *SessionService) Login(r *http.Request, w http.ResponseWriter, db *sql.DB) int {
+	sess, err := GetSession(r)
 	if err != nil {
 		return http.StatusBadRequest
 	}
@@ -39,7 +39,7 @@ func (s *SessionService) Login(ctx context.Context, r *http.Request, w http.Resp
 
 	queries := models.New(db)
 
-	user, err := queries.GetUserByUsername(ctx, username)
+	user, err := queries.GetUserByUsername(r.Context(), username)
 	if err != nil {
 		return http.StatusUnauthorized
 	}
@@ -49,7 +49,7 @@ func (s *SessionService) Login(ctx context.Context, r *http.Request, w http.Resp
 		return http.StatusUnauthorized
 	}
 
-	err = saveSession(r, w, sess, username)
+	err = SaveSession(r, w, sess, username)
 	if err != nil {
 		return http.StatusInternalServerError
 	}
@@ -57,7 +57,7 @@ func (s *SessionService) Login(ctx context.Context, r *http.Request, w http.Resp
 	return http.StatusOK
 }
 
-func getSession(r *http.Request) (*sessions.Session, error) {
+func GetSession(r *http.Request) (*sessions.Session, error) {
 	sess, err := store.Get(r, cookieStore)
 	if err != nil {
 		return nil, err
@@ -66,22 +66,22 @@ func getSession(r *http.Request) (*sessions.Session, error) {
 	return sess, err
 }
 
-func saveSession(r *http.Request, w http.ResponseWriter, sess *sessions.Session, username string) error {
+func SaveSession(r *http.Request, w http.ResponseWriter, sess *sessions.Session, username string) error {
 	sess.Values["authenticated"] = true
 	sess.Values["username"] = username
 	sess.Save(r, w)
 	return nil
 }
 
-func (s *SessionService) Logout(c echo.Context) error {
-	sess, err := store.Get(c.Request(), cookieStore)
+func (s *SessionService) Logout(r *http.Request, w http.ResponseWriter) error {
+	sess, err := store.Get(r, cookieStore)
 	if err != nil {
 		return err
 	}
 
 	sess.Values["authenticated"] = false
 	sess.Options.MaxAge = -1
-	sess.Save(c.Request(), c.Response())
+	sess.Save(r, w)
 	return nil
 }
 

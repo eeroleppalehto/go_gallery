@@ -28,7 +28,7 @@ func (r *RouteHandler) Login(c echo.Context) error {
 		LoginError: false,
 	}
 
-	status := r.Sessions.Login(c.Request().Context(), c.Request(), c.Response(), r.DB)
+	status := r.Sessions.Login(c.Request(), c.Response(), r.DB)
 	c.Response().Status = status
 	if status != http.StatusOK {
 		form.LoginError = true
@@ -41,7 +41,7 @@ func (r *RouteHandler) Login(c echo.Context) error {
 }
 
 func (r *RouteHandler) Logout(c echo.Context) error {
-	err := r.Sessions.Logout(c)
+	err := r.Sessions.Logout(c.Request(), c.Response())
 	if err != nil {
 		return c.String(http.StatusInternalServerError, "Internal Server Error")
 	}
