@@ -177,6 +177,8 @@ func (i *ImageService) Resize(img image.Image, newPoint image.Point) (image.Imag
 	return ResizedImg, nil
 }
 
+// TODO: Create function that converts HSL color to RGB and vice versa
+
 /*
 func main() {
 	log.Println("Start")
