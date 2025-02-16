@@ -2,7 +2,9 @@ package main
 
 import (
 	"database/sql"
+	"fmt"
 	"log"
+	"os"
 
 	"github.com/eeroleppalehto/go_gallery/handler"
 	authservice "github.com/eeroleppalehto/go_gallery/service/authService"
@@ -18,13 +20,15 @@ func main() {
 		log.Fatal("Error while loading variables from .env: ", err)
 	}
 
+	dbPassword := os.Getenv("MYSQL_ROOT_PASSWORD")
+
 	app := echo.New()
 
 	app.Static("/static", "static")
 
 	app.Use(middleware.Logger())
 
-	db, err := sql.Open("mysql", "root:Q2werty@/gollery?parseTime=true")
+	db, err := sql.Open("mysql", fmt.Sprintf("root:%s@/gollery?parseTime=true", dbPassword))
 	if err != nil {
 		log.Fatal("Failed to connect to database: ", err)
 	}
