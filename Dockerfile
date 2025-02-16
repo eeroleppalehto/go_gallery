@@ -1,7 +1,5 @@
-
-
 # Use Go 1.23 bookworm as base image
-FROM golang:1.23-bookworm AS base
+FROM golang:1.23-alpine AS base
 
 # Move to working directory /build
 WORKDIR /build
@@ -16,10 +14,10 @@ RUN go mod download
 COPY . .
 
 # Build the application
-RUN go build -o cmd/
+RUN go build -o gollery cmd/main.go
 
 # Document the port that may need to be published
 EXPOSE 8081
 
 # Start the application
-CMD ["/build/cmd/"]
+CMD ["/build/gollery"]
