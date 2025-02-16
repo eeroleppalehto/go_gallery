@@ -1,0 +1,33 @@
+services:
+  gollery_db:
+    container_name: postgres
+    image: go_mysql:latest
+    environment:
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PW}
+      - POSTGRES_DB=${POSTGRES_DB} #optional (specify default database instead of $POSTGRES_DB)
+    ports:
+      - "3306:3306"
+    restart: always
+    volumes:
+      - ./init:/docker-entrypoint-initdb.d
+      - ./data:/var/lib/postgresql
+
+  go-server:
+    container_name: node-server
+    image: node-server:latest
+    build: ../server
+    working_dir: /home/node/app
+    env_file:
+      - .env
+    environment:
+      - DATABASE_URL=postgresql://application:Q2werty@postgres:5432/dev_metsastys?schema=public
+      - PORT=8080
+    command: node index.js
+    ports:
+      - "8080:8080"
+    restart: always
+    depends_on:
+      - postgres
+    # volumes:
+    #   - ./node-server:/home/node/app
