@@ -31,3 +31,6 @@ views/**/*.txt
 
 # env file
 .env
+
+# DS_Store
+.DS_Store

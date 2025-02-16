@@ -56,3 +56,13 @@ To run tailwindcss in watch mode
 ```bash
 npm run watch
 ```
+
+### MySQL
+
+```bash
+docker build --tag gollery_db ./database
+```
+
+```bash
+docker run --name gollery_db -e MYSQL_ROOT_PASSWORD=my_password -p 3306:3306 gollery_db -d
+```
