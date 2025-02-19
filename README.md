@@ -1,21 +1,29 @@
 # go_gallery
 
-Website for viewing photographs
+Webapp for viewing photographs
 
 ## Setup
 
-### Install Go
-
-Follow the instructions on the [official website](https://golang.org/doc/install)
-
-Add following path to your **.profile**:
+To try this app locally create a `.env` file in the root directory with the following content
 
 ```bash
-export PATH=$PATH:/usr/local/go/bin
-export GOPATH=$HOME/go
-export PATH=$PATH:$GOROOT/bin:$GOPATH/bin
-export PATH=$PATH:$(go env GOPATH)/bin
+MYSQL_ROOT_PASSWORD="password"
+DATABASE_URL="root:password@tcp(gollery_db:3306)/gollery?parseTime=true"
 ```
+
+After creating the `.env` file, run the following command to start the server
+
+```bash
+docker compose up -d
+```
+
+## Development
+
+To develop this app, you need to install the following tools
+
+### Install Go
+
+Follow the instructions on the [official website](https://golang.org/doc/install) to install Go.
 
 ### Install Air
 
@@ -57,12 +65,23 @@ To run tailwindcss in watch mode
 npm run watch
 ```
 
-### MySQL
+### Setup MySQL Server
+
+To setup a MySQL server using Docker, run the following commands
 
 ```bash
 docker build --tag gollery_db ./database
 ```
 
 ```bash
-docker run --name gollery_db -e MYSQL_ROOT_PASSWORD=my_password -p 3306:3306 gollery_db -d
+docker run --name gollery_db -e MYSQL_ROOT_PASSWORD=password -p 3306:3306 gollery_db -d
+```
+
+### Setup environment variables
+
+Add the following environment variables to a `.env` file in the root directory
+
+```bash
+DATABASE_URL_DEV="root:Q2werty@tcp(127.0.0.1:3306)/gollery?parseTime=true"
+ENV="DEV"
 ```
