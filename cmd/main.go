@@ -2,7 +2,6 @@ package main
 
 import (
 	"database/sql"
-	"fmt"
 	"log"
 	"os"
 
@@ -20,7 +19,11 @@ func main() {
 		log.Fatal("Error while loading variables from .env: ", err)
 	}
 
-	dbPassword := os.Getenv("MYSQL_ROOT_PASSWORD")
+	connectionString := os.Getenv("DATABASE_URL")
+
+	if os.Getenv("ENV") == "DEV" {
+		connectionString = os.Getenv("DATABASE_URL_DEV")
+	}
 
 	app := echo.New()
 
@@ -28,7 +31,8 @@ func main() {
 
 	app.Use(middleware.Logger())
 
-	db, err := sql.Open("mysql", fmt.Sprintf("root:%s@/gollery?parseTime=true", dbPassword))
+	db, err := sql.Open("mysql", connectionString)
+
 	if err != nil {
 		log.Fatal("Failed to connect to database: ", err)
 	}
