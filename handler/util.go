@@ -20,7 +20,7 @@ func (r *RouteHandler) render(c echo.Context, component templ.Component) error {
 		return component.Render(c.Request().Context(), c.Response())
 	}
 
-	auth := r.Sessions.IsAuthenticated(c)
+	auth := r.Sessions.IsAuthenticated(c.Request())
 
 	return layout.Base(component, auth.IsAuthenticated, auth.Username).Render(c.Request().Context(), c.Response())
 }

@@ -1,11 +1,11 @@
 package authservice
 
 import (
+	"fmt"
 	"net/http"
 
 	"github.com/eeroleppalehto/go_gallery/models"
 	"github.com/gorilla/sessions"
-	"github.com/labstack/echo/v4"
 )
 
 var (
@@ -26,48 +26,48 @@ func (s *SessionService) Init() {
 	store.Options.Secure = true
 }
 
-func (s *SessionService) Login(c echo.Context, q *models.Queries) error {
-	sess, err := store.Get(c.Request(), cookieStore)
+func (s *SessionService) Login(req *http.Request, w http.ResponseWriter, q *models.Queries) (int, error) {
+	sess, err := store.Get(req, cookieStore)
 	if err != nil {
-		c.Response().Status = http.StatusInternalServerError
-		return err
+		return 500, err
 	}
 
-	username := c.FormValue("username")
-	password := c.FormValue("password")
+	username := req.FormValue("username")
+	password := req.FormValue("password")
 
-	user, err := q.GetUserByUsername(c.Request().Context(), username)
+	user, err := q.GetUserByUsername(req.Context(), username)
 	if err != nil {
-		c.Response().Status = 401
-		return err
+		return 401, err
 	}
 
 	isValidPW := ComparePassowrds([]byte(user.Password), password)
 	if !isValidPW {
-		c.Response().Status = 401
-		return err
+		return 401, err
 	}
-
 	sess.Values["authenticated"] = true
 	sess.Values["username"] = username
-	sess.Save(c.Request(), c.Response())
-	return nil
+	err = sess.Save(req, w)
+	if err != nil {
+		fmt.Println("Session fail: ", err)
+		return 500, nil
+	}
+	return 200, nil
 }
 
-func (s *SessionService) Logout(c echo.Context) error {
-	sess, err := store.Get(c.Request(), cookieStore)
+func (s *SessionService) Logout(req *http.Request, w http.ResponseWriter) (int, error) {
+	sess, err := store.Get(req, cookieStore)
 	if err != nil {
-		return err
+		return 500, err
 	}
 
 	sess.Values["authenticated"] = false
 	sess.Options.MaxAge = -1
-	sess.Save(c.Request(), c.Response())
-	return nil
+	sess.Save(req, w)
+	return 200, nil
 }
 
-func (s *SessionService) IsAuthenticated(c echo.Context) UserSession {
-	sess, _ := store.Get(c.Request(), cookieStore)
+func (s *SessionService) IsAuthenticated(req *http.Request) UserSession {
+	sess, _ := store.Get(req, cookieStore)
 
 	if auth, ok := sess.Values["authenticated"].(bool); !ok || !auth {
 		return UserSession{

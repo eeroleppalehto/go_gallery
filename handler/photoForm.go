@@ -45,7 +45,7 @@ func (r *RouteHandler) PostPhoto(c echo.Context) error {
 	defer src.Close()
 
 	// Add a row to the photo table
-	username := r.Sessions.IsAuthenticated(c).Username
+	username := r.Sessions.IsAuthenticated(c.Request()).Username
 	user, err := queries.GetUserByUsername(c.Request().Context(), username)
 	if err != nil {
 		return err

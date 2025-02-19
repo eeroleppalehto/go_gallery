@@ -11,7 +11,7 @@ import (
 func (r *RouteHandler) LoginForm(c echo.Context) error {
 	form := login.NewLoginForm()
 
-	authState := r.Sessions.IsAuthenticated(c)
+	authState := r.Sessions.IsAuthenticated(c.Request())
 
 	if authState.IsAuthenticated {
 		form.IsSuccess = true
@@ -30,7 +30,8 @@ func (r *RouteHandler) Login(c echo.Context) error {
 
 	queries := getQueryEngine(r.DB)
 
-	err := r.Sessions.Login(c, queries)
+	status, err := r.Sessions.Login(c.Request(), c.Response().Writer, queries)
+	c.Response().Status = status
 	if err != nil {
 		form.LoginError = true
 		return r.render(c, login.Form(form))
@@ -42,7 +43,8 @@ func (r *RouteHandler) Login(c echo.Context) error {
 }
 
 func (r *RouteHandler) Logout(c echo.Context) error {
-	err := r.Sessions.Logout(c)
+	status, err := r.Sessions.Logout(c.Request(), c.Response().Writer)
+	c.Response().Status = status
 	if err != nil {
 		return c.String(http.StatusInternalServerError, "Internal Server Error")
 	}
