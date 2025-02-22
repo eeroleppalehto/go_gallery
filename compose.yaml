@@ -6,6 +6,7 @@ services:
     image: gollery-server:latest
     environment:
       - DATABASE_URL=${DATABASE_URL}
+      - ENV="TEST"
     env_file:
       - ./.env
     ports:
