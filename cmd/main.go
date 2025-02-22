@@ -51,6 +51,7 @@ func main() {
 	app.GET("/photos/:imageID", routeHandler.PhotoShow)
 	app.GET("/photos/add-new", routeHandler.PhotoForm)
 	app.POST("/photos/add-new", routeHandler.PostPhoto)
+	app.DELETE("/photos/:imageID", routeHandler.PhotoDelete)
 
 	app.GET("/creators", routeHandler.PhotographerShow)
 

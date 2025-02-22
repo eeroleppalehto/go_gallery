@@ -47,6 +47,14 @@ func (q *Queries) CreateUser(ctx context.Context, arg CreateUserParams) (sql.Res
 	return q.db.ExecContext(ctx, createUser, arg.Username, arg.Email, arg.Password)
 }
 
+const deletePhoto = `-- name: DeletePhoto :execresult
+DELETE FROM photo WHERE photo_id = ?
+`
+
+func (q *Queries) DeletePhoto(ctx context.Context, photoID uint32) (sql.Result, error) {
+	return q.db.ExecContext(ctx, deletePhoto, photoID)
+}
+
 const emailExists = `-- name: EmailExists :one
 SELECT EXISTS(SELECT 1 FROM user WHERE email = ?)
 `

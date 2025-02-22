@@ -27,3 +27,6 @@ INSERT INTO photo (user_id, title, description, filename, date) VALUES (?, ?, ?,
 
 -- name: GetPhoto :one
 SELECT * FROM photo WHERE photo_id = ?;
+
+-- name: DeletePhoto :execresult
+DELETE FROM photo WHERE photo_id = ?;
