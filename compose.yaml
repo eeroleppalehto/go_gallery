@@ -1,4 +1,13 @@
 services:
+
+  valkey:
+    image: valkey/valkey
+    container_name: valkey
+    command: valkey-server
+    restart: unless-stopped
+    ports:
+      - "6379:6379"
+
   gollery-server:
     build:
       context: .
